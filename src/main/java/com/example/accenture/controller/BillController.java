@@ -27,7 +27,7 @@ public class BillController {
 	@Autowired
 	private BillService billService;
 	
-	@PostMapping
+	/*@PostMapping
 	private ResponseEntity<Bill> saveReporte(@RequestBody Long id, List<Product> productos, Client id_client, Client address_client,int quantity, Date dateBuy){
 		try {
 			Bill billSaved = (Bill) billService.save(id, productos,id_client, address_client,quantity,dateBuy);
@@ -37,6 +37,6 @@ public class BillController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 		}
 		
-	}
+	}*/
 
 }
