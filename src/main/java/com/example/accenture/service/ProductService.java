@@ -1,5 +1,6 @@
 package com.example.accenture.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ public class ProductService  {
 	public ProductService() {
 		super();
 		
+		this.lstProduct = new ArrayList<>();
+		
 		lstProduct.add(new Product(new Long(1), "Arroz", 5900));
 		lstProduct.add(new Product(new Long(2), "Shampoo", 15900));
 		lstProduct.add(new Product(new Long(3), "Limpido", 21900));
@@ -27,11 +30,10 @@ public class ProductService  {
 		
 	}
 
-
-
-
 	public List<Product> findAll() {
 		// TODO Auto-generated method stub
 		return lstProduct;
 	}
+	
 }
+

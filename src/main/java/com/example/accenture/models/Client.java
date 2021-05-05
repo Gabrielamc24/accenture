@@ -7,7 +7,20 @@ public class Client {
 	private int identity;
 	private String name;
 	private String address;
+		
+	public Client() {
+		super();
+	}
 	
+	public Client(Long id, int identity, String name, String address) {
+		super();
+		this.id = id;
+		this.identity = identity;
+		this.name = name;
+		this.address = address;
+	}
+
+
 	public Long getId() {
 		return id;
 	}

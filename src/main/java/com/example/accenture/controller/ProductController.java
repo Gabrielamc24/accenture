@@ -17,12 +17,12 @@ import com.example.accenture.service.ProductService;
 public class ProductController {
 	
 	@Autowired
-	private ProductService personaServicio;
+	private ProductService productService;
 
 	//crear metodo que retorne la lista de productos
 	
 	@GetMapping
 	private ResponseEntity<List<Product>> getAllProduct(){
-		return ResponseEntity.ok(personaServicio.findAll());
+		return ResponseEntity.ok(productService.findAll());
 	}
 }
