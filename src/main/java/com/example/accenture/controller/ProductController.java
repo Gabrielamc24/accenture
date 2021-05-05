@@ -19,8 +19,6 @@ public class ProductController {
 	@Autowired
 	private ProductService productService;
 
-	//crear metodo que retorne la lista de productos
-	
 	@GetMapping
 	private ResponseEntity<List<Product>> getAllProduct(){
 		return ResponseEntity.ok(productService.findAll());
