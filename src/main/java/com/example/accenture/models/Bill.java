@@ -1,26 +1,24 @@
-package models;
+package com.example.accenture.models;
 
-import javax.persistence.Entity;
+import java.util.Date;
+import java.util.List;
 
-@Entity
 public class Bill {
 	
 	private Long id;
-	private Product id_product;
+	private List<Product> productos;
 	private Client id_client;
 	private int quantity;
+	private Date dateBuy;
+	
+	
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Product getId_product() {
-		return id_product;
-	}
-	public void setId_product(Product id_product) {
-		this.id_product = id_product;
-	}
+	
 	public Client getId_client() {
 		return id_client;
 	}
@@ -33,6 +31,20 @@ public class Bill {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+	public List<Product> getProductos() {
+		return productos;
+	}
+	public void setProductos(List<Product> productos) {
+		this.productos = productos;
+	}
+	public Date getDateBuy() {
+		return dateBuy;
+	}
+	public void setDateBuy(Date dateBuy) {
+		this.dateBuy = dateBuy;
+	}
+	
+	
 	
 	
 

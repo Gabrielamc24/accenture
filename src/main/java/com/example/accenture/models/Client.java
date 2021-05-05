@@ -1,8 +1,6 @@
-package models;
+package com.example.accenture.models;
 
-import javax.persistence.Entity;
 
-@Entity
 public class Client {
 
 	private Long id;
