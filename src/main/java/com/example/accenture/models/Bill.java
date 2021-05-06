@@ -12,26 +12,25 @@ public class Bill {
 	private double domicile;
 	private double tax;
 	private double total;
+	private String state;
 	
 	
 	public Bill() {
 		super();
 	}
-	
-	
-	public Bill(Long id, List<Product> productos, Client client, double total, Date dateBuy, double domicile,
-			double tax) {
+
+	public Bill(Long id, Date dateBuy, Client client, List<Product> productos, double domicile, double tax,
+			double total, String state) {
 		super();
 		this.id = id;
-		this.productos = productos;
-		this.client = client;
-		this.total = total;
 		this.dateBuy = dateBuy;
+		this.client = client;
+		this.productos = productos;
 		this.domicile = domicile;
 		this.tax = tax;
+		this.total = total;
+		this.state = state;
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -39,10 +38,6 @@ public class Bill {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	
-	
-	
 
 	public double getDomicile() {
 		return domicile;
@@ -86,9 +81,13 @@ public class Bill {
 	public void setDateBuy(Date dateBuy) {
 		this.dateBuy = dateBuy;
 	}
-	
-	
-	
-	
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
 
 }

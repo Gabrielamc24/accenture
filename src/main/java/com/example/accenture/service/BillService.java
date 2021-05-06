@@ -77,6 +77,7 @@ public class BillService {
 		
 		bill.setProductos(ps);
 		bill.setDateBuy(new Date());
+		bill.setState("Activa");
 		lstBill.add(bill);
 
 		return bill;
@@ -85,56 +86,66 @@ public class BillService {
 	public Bill update(Long idBill, BillModelRest model ) {
 		Bill bill = findById(idBill);
 		if(bill != null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(bill.getDateBuy());
+			calendar.add(Calendar.HOUR, 5);
+			calendar.getTime();
 			
-		    Calendar calendar = Calendar.getInstance();
-		    calendar.setTime(bill.getDateBuy());
-		    calendar.add(Calendar.HOUR, 5);
-		    Date tempDate = calendar.getTime();
-		    System.out.println("Actual "+ new Date() + "Nueva "+tempDate);
-		   // if()
-			lstBill.remove(bill);
-			
-			bill.setClient(model.getClient());
-			List<Product> ps = new ArrayList<>();
-			List<Product> psCurrent = productService.findAll();
-			if (model.getProductos() != null) {
-				double suma = 0;
-				double taxP = 0;
-				double dom = 0;
-				for (int i = 0; i < model.getProductos().size(); i++) {
-					for (int j = 0; j < psCurrent.size(); j++) {
-						if(psCurrent.get(j).getId().intValue() == model.getProductos().get(i)) {
-							ps.add(psCurrent.get(j));
-							suma += psCurrent.get(j).getPrice();
-							
-							if(suma >= 70000) {
-								taxP = suma * 0.19;
-								bill.setTax(taxP);
+			Date dateC = new Date(); 
+			if(dateC.before(calendar.getTime())){
+				
+				lstBill.remove(bill);
+				
+				bill.setClient(model.getClient());
+				List<Product> ps = new ArrayList<>();
+				List<Product> psCurrent = productService.findAll();
+				if (model.getProductos() != null) {
+					double suma = 0;
+					double taxP = 0;
+					double dom = 0;
+					for (int i = 0; i < model.getProductos().size(); i++) {
+						for (int j = 0; j < psCurrent.size(); j++) {
+							if(psCurrent.get(j).getId().intValue() == model.getProductos().get(i)) {
+								/*if(psCurrent.get(j).getPrice() >= model.getProductos().get(i)) {
+									
+								}*/
+								ps.add(psCurrent.get(j));
+								suma += psCurrent.get(j).getPrice();
+								
+								if(suma >= 70000) {
+									taxP = suma * 0.19;
+									bill.setTax(taxP);
+								}
+								else {
+									bill.setTax(taxP);
+								}
+								
+								break;
 							}
-							else {
-								bill.setTax(taxP);
-							}
-							
-							break;
 						}
 					}
+					if(suma <= 100000 && suma >=70000)
+					{
+						dom = 4000;
+						bill.setTotal(suma+taxP+dom);
+					}
+					else {
+						bill.setTotal(suma+taxP+dom);
+					}
+					bill.setDomicile(dom);
+					bill.setTotal(suma);
+					bill.setState("Actualizada");
+					bill.setProductos(ps);
 				}
-				if(suma <= 100000 && suma >=70000)
-				{
-					dom = 4000;
-					bill.setTotal(suma+taxP+dom);
-				}
-				else {
-					bill.setTotal(suma+taxP+dom);
-				}
-				bill.setDomicile(dom);
-				bill.setTotal(suma);
-				bill.setProductos(ps);
+				
+				lstBill.add(bill);
+				
+				return bill;
+			}
+			else {
+				return bill;
 			}
 			
-			lstBill.add(bill);
-			
-			return bill;
 		}
 		return null;
 	}
@@ -142,18 +153,25 @@ public class BillService {
 
 	public Bill delete(Long idBill) {
 
-		int v = 15;
 		Bill bill = findById(idBill);
 		if(bill != null) {
-			if(v<12) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(bill.getDateBuy());
+			calendar.add(Calendar.HOUR, 12);
+			calendar.getTime();
+			
+			Date dateC = new Date(); 
+			if(dateC.before(calendar.getTime())){
 				lstBill.remove(bill);
 			}
 			else {
 				for (int i = 0; i < lstBill.size(); i++) {
 					double value = lstBill.get(i).getTotal();
 					double total= value * 0.10;
-					lstBill.remove(bill.getTotal());
+					bill.setDomicile(0);
+					bill.setTax(0);
 					bill.setTotal(total);
+					bill.setState("Cancelada");
 					return bill;
 				}
 	
