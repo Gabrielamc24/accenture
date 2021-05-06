@@ -43,17 +43,17 @@ public class BillService {
 		List<Product> ps = new ArrayList<>();
 		List<Product> psCurrent = productService.findAll();
 		if (model.getProductos() != null) {
-			double suma = 0;
+			double sum = 0;
 			double taxP = 0;
 			double dom = 0;
 			for (int i = 0; i < model.getProductos().size(); i++) {
 				for (int j = 0; j < psCurrent.size(); j++) {
 					if(psCurrent.get(j).getId().intValue() == model.getProductos().get(i)) {
 						ps.add(psCurrent.get(j));
-						suma += psCurrent.get(j).getPrice();
+						sum += psCurrent.get(j).getPrice();
 						
-						if(suma >= 70000) {
-							taxP = suma * 0.19;
+						if(sum >= 70000) {
+							taxP = sum * 0.19;
 							bill.setTax(taxP);
 						}
 						else {
@@ -64,13 +64,13 @@ public class BillService {
 					}
 				}
 			}
-			if(suma <= 100000 && suma >=70000)
+			if(sum <= 100000 && sum >=70000)
 			{
 				dom = 4000;
-				bill.setTotal(suma+taxP+dom);
+				bill.setTotal(sum+taxP+dom);
 			}
 			else {
-				bill.setTotal(suma+taxP+dom);
+				bill.setTotal(sum+taxP+dom);
 			}
 			bill.setDomicile(dom);
 		}
@@ -82,7 +82,7 @@ public class BillService {
 
 		return bill;
 	}
-	
+	double sumProdCurrent = 0.0;
 	public Bill update(Long idBill, BillModelRest model ) {
 		Bill bill = findById(idBill);
 		if(bill != null) {
@@ -92,9 +92,15 @@ public class BillService {
 			calendar.getTime();
 			
 			Date dateC = new Date(); 
+			
 			if(dateC.before(calendar.getTime())){
-				
 				lstBill.remove(bill);
+				
+				
+				bill.getProductos().stream().forEach(x->{
+					sumProdCurrent += x.getPrice();
+				});
+				
 				
 				bill.setClient(model.getClient());
 				List<Product> ps = new ArrayList<>();
@@ -106,9 +112,6 @@ public class BillService {
 					for (int i = 0; i < model.getProductos().size(); i++) {
 						for (int j = 0; j < psCurrent.size(); j++) {
 							if(psCurrent.get(j).getId().intValue() == model.getProductos().get(i)) {
-								/*if(psCurrent.get(j).getPrice() >= model.getProductos().get(i)) {
-									
-								}*/
 								ps.add(psCurrent.get(j));
 								suma += psCurrent.get(j).getPrice();
 								
@@ -124,6 +127,11 @@ public class BillService {
 							}
 						}
 					}
+					if(suma < sumProdCurrent) {
+						return null;
+					}
+					
+					
 					if(suma <= 100000 && suma >=70000)
 					{
 						dom = 4000;
