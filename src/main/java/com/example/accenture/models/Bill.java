@@ -6,27 +6,33 @@ import java.util.List;
 public class Bill {
 	
 	private Long id;
-	private List<Product> productos;
-	private Client id_client;
-	private Client address_client;
-	private int quantity;
 	private Date dateBuy;
+	private Client client;
+	private List<Product> productos;
+	private double domicile;
+	private double tax;
+	private double total;
 	
 	
 	public Bill() {
 		super();
 	}
 	
-	public Bill(Long id, List<Product> productos, Client id_client, Client address_client,int quantity, Date dateBuy) {
+	
+	public Bill(Long id, List<Product> productos, Client client, double total, Date dateBuy, double domicile,
+			double tax) {
 		super();
 		this.id = id;
 		this.productos = productos;
-		this.id_client = id_client;
-		this.address_client = address_client;
-		this.quantity = quantity;
+		this.client = client;
+		this.total = total;
 		this.dateBuy = dateBuy;
+		this.domicile = domicile;
+		this.tax = tax;
 	}
-	
+
+
+
 	public Long getId() {
 		return id;
 	}
@@ -34,26 +40,39 @@ public class Bill {
 		this.id = id;
 	}
 	
-	public Client getId_client() {
-		return id_client;
-	}
-	public void setId_client(Client id_client) {
-		this.id_client = id_client;
-	}
 	
-	public Client getAddress_client() {
-		return address_client;
+	
+	
+
+	public double getDomicile() {
+		return domicile;
 	}
 
-	public void setAddress_client(Client address_client) {
-		this.address_client = address_client;
+	public void setDomicile(double domicile) {
+		this.domicile = domicile;
 	}
 
-	public int getQuantity() {
-		return quantity;
+	public double getTax() {
+		return tax;
 	}
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
+
+	public void setTax(double tax) {
+		this.tax = tax;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
+	public double getTotal() {
+		return total;
+	}
+	public void setTotal(double total) {
+		this.total = total;
 	}
 	public List<Product> getProductos() {
 		return productos;

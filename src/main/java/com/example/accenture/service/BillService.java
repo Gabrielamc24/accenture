@@ -1,34 +1,153 @@
 package com.example.accenture.service;
 
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.accenture.controller.models.BillModelRest;
 import com.example.accenture.models.Bill;
-import com.example.accenture.models.Client;
 import com.example.accenture.models.Product;
 
 @Service
 public class BillService {
-	
-	private List<Object> lstProductBill;
-	private List<Bill> lstBill;
 
-	
-	/*public List<Bill> save(Long id, List<Product> productos, Client id_client, Client address_client,int quantity, Date dateBuy) {
-		
-		this.lstBill = new ArrayList<>();
-		lstBill.add(new Bill(new Long(id),productos,id_client,address_client,quantity,dateBuy));
-		return lstBill;
-	}*/
-	
-	public List<Bill> saveProducts(Product id, int quantity){
-		
-		lstProductBill.add(id);
-		lstProductBill.add(quantity);
+	@Autowired
+	private ProductService productService;
+
+	private List<Bill> lstBill = new ArrayList<>();
+
+	public List<Bill> findAll() {
 		return lstBill;
 	}
+	
+	public Bill findById(Long id) {
+		for (int i = 0; i < lstBill.size(); i++) {
+			if(lstBill.get(i).getId().equals(id)) {
+				return lstBill.get(i);
+			}
+		}
+		return null;
+	}
+
+	public Bill saveProduct(BillModelRest model) {
+
+		Bill bill = new Bill();
+		bill.setId(System.currentTimeMillis());
+		
+		bill.setClient(model.getClient());
+		List<Product> ps = new ArrayList<>();
+		List<Product> psCurrent = productService.findAll();
+		if (model.getProductos() != null) {
+			double suma = 0;
+			double taxP = 0;
+			double dom = 0;
+			for (int i = 0; i < model.getProductos().size(); i++) {
+				for (int j = 0; j < psCurrent.size(); j++) {
+					if(psCurrent.get(j).getId().intValue() == model.getProductos().get(i)) {
+						ps.add(psCurrent.get(j));
+						suma += psCurrent.get(j).getPrice();
+						
+						if(suma >= 70000) {
+							taxP = suma * 0.19;
+							bill.setTax(taxP);
+						}
+						else {
+							bill.setTax(taxP);
+						}
+						
+						break;
+					}
+				}
+			}
+			if(suma <= 100000 && suma >=70000)
+			{
+				dom = 4000;
+				bill.setTotal(suma+taxP+dom);
+			}
+			else {
+				bill.setTotal(suma+taxP+dom);
+			}
+			bill.setDomicile(dom);
+		}
+		
+		bill.setProductos(ps);
+		bill.setDateBuy(new Date());
+		lstBill.add(bill);
+
+		return bill;
+	}
+	
+	public Bill update(Long idBill, BillModelRest model ) {
+		Bill bill = findById(idBill);
+		if(bill != null) {
+			
+		    Calendar calendar = Calendar.getInstance();
+		    calendar.setTime(bill.getDateBuy());
+		    calendar.add(Calendar.HOUR, 5);
+		    Date tempDate = calendar.getTime();
+		    System.out.println("Actual "+ new Date() + "Nueva "+tempDate);
+		   // if()
+			lstBill.remove(bill);
+			
+			bill.setClient(model.getClient());
+			List<Product> ps = new ArrayList<>();
+			List<Product> psCurrent = productService.findAll();
+			if (model.getProductos() != null) {
+				double suma = 0;
+				double taxP = 0;
+				double dom = 0;
+				for (int i = 0; i < model.getProductos().size(); i++) {
+					for (int j = 0; j < psCurrent.size(); j++) {
+						if(psCurrent.get(j).getId().intValue() == model.getProductos().get(i)) {
+							ps.add(psCurrent.get(j));
+							suma += psCurrent.get(j).getPrice();
+							
+							if(suma >= 70000) {
+								taxP = suma * 0.19;
+								bill.setTax(taxP);
+							}
+							else {
+								bill.setTax(taxP);
+							}
+							
+							break;
+						}
+					}
+				}
+				if(suma <= 100000 && suma >=70000)
+				{
+					dom = 4000;
+					bill.setTotal(suma+taxP+dom);
+				}
+				else {
+					bill.setTotal(suma+taxP+dom);
+				}
+				bill.setDomicile(dom);
+				bill.setTotal(suma);
+				bill.setProductos(ps);
+			}
+			
+			lstBill.add(bill);
+			
+			return bill;
+		}
+		return null;
+	}
+	
+
+	public Bill delete(Long idBill) {
+
+		Bill bill = findById(idBill);
+		if(bill != null) {
+			lstBill.remove(bill);
+		}
+		return null;
+	}
+
 
 }
