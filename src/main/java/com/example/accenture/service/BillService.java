@@ -142,9 +142,23 @@ public class BillService {
 
 	public Bill delete(Long idBill) {
 
+		int v = 15;
 		Bill bill = findById(idBill);
 		if(bill != null) {
-			lstBill.remove(bill);
+			if(v<12) {
+				lstBill.remove(bill);
+			}
+			else {
+				for (int i = 0; i < lstBill.size(); i++) {
+					double value = lstBill.get(i).getTotal();
+					double total= value * 0.10;
+					lstBill.remove(bill.getTotal());
+					bill.setTotal(total);
+					return bill;
+				}
+	
+			}
+			
 		}
 		return null;
 	}
